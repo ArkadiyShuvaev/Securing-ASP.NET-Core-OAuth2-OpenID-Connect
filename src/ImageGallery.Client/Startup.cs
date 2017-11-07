@@ -1,4 +1,8 @@
 ﻿using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using ImageGallery.Client.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace ImageGallery.Client
 {
@@ -60,6 +66,9 @@ namespace ImageGallery.Client
 				AuthenticationScheme = authenticationScheme
 			});
 
+			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+
 			app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
 	        {
 				AuthenticationScheme = "oidc",
@@ -73,7 +82,33 @@ namespace ImageGallery.Client
 				SignInScheme = authenticationScheme,
 				SaveTokens = true,
 				ClientSecret = "secret",
-				GetClaimsFromUserInfoEndpoint = true
+				GetClaimsFromUserInfoEndpoint = true,
+				Events = new OpenIdConnectEvents
+				{
+					OnTokenValidated = tokenValidatedContext =>
+					{
+						var identity = tokenValidatedContext.Ticket.Principal.Identity as ClaimsIdentity;
+						if (identity != null)
+						{
+							var subjectClaim = identity.Claims.FirstOrDefault(c => c.Type == "sub");
+							var newClaimsIdentity = new ClaimsIdentity(tokenValidatedContext.Ticket.AuthenticationScheme, 
+								"given_name", "role");
+
+							newClaimsIdentity.AddClaim(subjectClaim);
+
+							tokenValidatedContext.Ticket = new AuthenticationTicket(
+								new ClaimsPrincipal(newClaimsIdentity), 
+								tokenValidatedContext.Ticket.Properties,
+								tokenValidatedContext.Ticket.AuthenticationScheme);
+						}
+						return Task.FromResult(0);
+					},
+
+					OnUserInformationReceived = context =>
+					{
+						return Task.FromResult(0);
+					}
+				}
 			});
 
             app.UseStaticFiles();
