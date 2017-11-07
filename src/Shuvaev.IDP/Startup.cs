@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,7 +30,9 @@ namespace Shuvaev.IDP
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
         {
-	        logger.AddConsole();
+	        var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
+	        configuration.DisableTelemetry = true;
+			logger.AddConsole();
 	        logger.AddDebug();
 
 			if (env.IsDevelopment())
