@@ -1,0 +1,11 @@
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\bin\Debug\netcoreapp2.0\Shuvaev.IDP.deps.json
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\bin\Debug\netcoreapp2.0\Shuvaev.IDP.runtimeconfig.json
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\bin\Debug\netcoreapp2.0\Shuvaev.IDP.runtimeconfig.dev.json
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\bin\Debug\netcoreapp2.0\Shuvaev.IDP.dll
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\obj\Debug\netcoreapp2.0\Shuvaev.IDP.csprojResolveAssemblyReference.cache
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\obj\Debug\netcoreapp2.0\Shuvaev.IDP.csproj.CoreCompileInputs.cache
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\obj\Debug\netcoreapp2.0\Shuvaev.IDP.AssemblyInfoInputs.cache
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\obj\Debug\netcoreapp2.0\Shuvaev.IDP.AssemblyInfo.cs
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\bin\Debug\netcoreapp2.0\Shuvaev.IDP.pdb
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\obj\Debug\netcoreapp2.0\Shuvaev.IDP.dll
+D:\Temp\projects\Securing-ASPNetCore\src\Shuvaev.IDP\obj\Debug\netcoreapp2.0\Shuvaev.IDP.pdb

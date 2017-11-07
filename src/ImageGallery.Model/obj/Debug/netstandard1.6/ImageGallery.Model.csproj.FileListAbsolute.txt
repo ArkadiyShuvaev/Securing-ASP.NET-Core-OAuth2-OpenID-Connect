@@ -1,0 +1,9 @@
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\bin\Debug\netstandard1.6\ImageGallery.Model.deps.json
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\bin\Debug\netstandard1.6\ImageGallery.Model.dll
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\bin\Debug\netstandard1.6\ImageGallery.Model.pdb
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\obj\Debug\netstandard1.6\ImageGallery.Model.csprojResolveAssemblyReference.cache
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\obj\Debug\netstandard1.6\ImageGallery.Model.csproj.CoreCompileInputs.cache
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\obj\Debug\netstandard1.6\ImageGallery.Model.AssemblyInfoInputs.cache
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\obj\Debug\netstandard1.6\ImageGallery.Model.AssemblyInfo.cs
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\obj\Debug\netstandard1.6\ImageGallery.Model.dll
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.Model\obj\Debug\netstandard1.6\ImageGallery.Model.pdb

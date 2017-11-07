@@ -1,0 +1,13 @@
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.API.deps.json
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.API.runtimeconfig.json
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.API.runtimeconfig.dev.json
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.API.dll
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.API.pdb
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.Model.dll
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\bin\Debug\netcoreapp1.1\ImageGallery.Model.pdb
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\obj\Debug\netcoreapp1.1\ImageGallery.API.csprojResolveAssemblyReference.cache
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\obj\Debug\netcoreapp1.1\ImageGallery.API.csproj.CoreCompileInputs.cache
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\obj\Debug\netcoreapp1.1\ImageGallery.API.AssemblyInfoInputs.cache
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\obj\Debug\netcoreapp1.1\ImageGallery.API.AssemblyInfo.cs
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\obj\Debug\netcoreapp1.1\ImageGallery.API.dll
+D:\Temp\projects\Securing-ASPNetCore\src\ImageGallery.API\obj\Debug\netcoreapp1.1\ImageGallery.API.pdb
