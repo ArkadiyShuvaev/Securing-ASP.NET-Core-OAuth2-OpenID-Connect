@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using ImageGallery.Model;
 using System.Net.Http;
 using System.IO;
+using IdentityModel.Client;
 using ImageGallery.Client.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -170,7 +171,29 @@ namespace ImageGallery.Client.Controllers
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
-	    public async Task WriteOutIdentityInformation()
+	    public async Task<IActionResult> OrderFrame()
+	    {
+			var discoveryClient = new DiscoveryClient("https://localhost:44393/");
+		    var metaDataResponse = await discoveryClient.GetAsync();
+			var userInfoClient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
+		    await WriteOutAccessTokenInfo();
+			var accessToken =
+			    await HttpContext.Authentication.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+			var userInfoResponse = await userInfoClient.GetAsync(accessToken);
+
+		    if (userInfoResponse.IsError)
+		    {
+			    throw new Exception(
+					"Problem accessing the UserInfo endpoint.", userInfoResponse.Exception);
+		    }
+
+		    var address = userInfoResponse.Claims.FirstOrDefault(c => c.Type == "address")?.Value;
+			//Convert.ToString(accessToken.Principal.Claims.FirstOrDefault(c => c.Type == "address"))
+
+			return View(new OrderFrameViewModel(address));
+	    }
+
+	    private async Task WriteOutIdentityInformation()
 	    {
 		    var identityToken = await HttpContext.Authentication.GetTokenAsync(OpenIdConnectParameterNames.IdToken);
 
@@ -182,7 +205,14 @@ namespace ImageGallery.Client.Controllers
 		    }
 		}
 
-	    public async Task Logout()
+	    private async Task WriteOutAccessTokenInfo()
+	    {
+		    var accessToken = await HttpContext.Authentication.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+		    Debug.WriteLine($"Access token: {accessToken}");
+	    }
+
+		public async Task Logout()
 	    {
 		    await HttpContext.Authentication.SignOutAsync("Cookies");
 		    await HttpContext.Authentication.SignOutAsync("oidc");

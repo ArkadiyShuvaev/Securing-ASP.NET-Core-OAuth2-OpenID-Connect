@@ -46,7 +46,7 @@ namespace ImageGallery.Client
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+	        loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
@@ -75,7 +75,7 @@ namespace ImageGallery.Client
 				Authority = "https://localhost:44393/",
 				RequireHttpsMetadata = true,
 				ClientId = "imagegalleryclient",
-				Scope = { "openid", "profile" },
+				Scope = { "openid", "profile", "address" },
 				ResponseType = "code id_token",
 				//CallbackPath = "...",
 				//SignedOutCallbackPath = new PathString(""),
@@ -106,6 +106,7 @@ namespace ImageGallery.Client
 
 					OnUserInformationReceived = context =>
 					{
+						context.User.Remove("address"); //remove existing claim from the user information context
 						return Task.FromResult(0);
 					}
 				}
