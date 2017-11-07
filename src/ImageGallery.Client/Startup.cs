@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,14 +69,17 @@ namespace ImageGallery.Client
 				Scope = { "openid", "profile" },
 				ResponseType = "code id_token",
 				//CallbackPath = "...",
+				//SignedOutCallbackPath = new PathString(""),
 				SignInScheme = authenticationScheme,
 				SaveTokens = true,
-				ClientSecret = "secret"
+				ClientSecret = "secret",
+				GetClaimsFromUserInfoEndpoint = true
 			});
 
             app.UseStaticFiles();
 
-            app.UseMvc(routes =>
+    
+			app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

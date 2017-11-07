@@ -74,7 +74,12 @@ namespace Shuvaev.IDP
 					{
 						new Secret("secret".Sha256())
 					},
-					AlwaysIncludeUserClaimsInIdToken = true
+					// AlwaysIncludeUserClaimsInIdToken = true,
+					PostLogoutRedirectUris =
+					{
+						"https://localhost:44379/signout-callback-oidc"
+					}
+
 				}
 		    };
 	    }
