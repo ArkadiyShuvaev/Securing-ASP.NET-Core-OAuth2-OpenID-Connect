@@ -67,6 +67,8 @@ namespace ImageGallery.Client
 				AccessDeniedPath = new PathString("/Authorization/AccessDenied")
 			});
 
+			// Resetting the claim mapping dictionary 
+			// ensures the original claim types are kept
 			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 
