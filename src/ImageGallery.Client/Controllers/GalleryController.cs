@@ -13,6 +13,7 @@ using System.IO;
 using IdentityModel.Client;
 using ImageGallery.Client.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace ImageGallery.Client.Controllers
@@ -171,9 +172,10 @@ namespace ImageGallery.Client.Controllers
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
+	    [Authorize(Roles = "PayingUser")]
 	    public async Task<IActionResult> OrderFrame()
 	    {
-			var discoveryClient = new DiscoveryClient("https://localhost:44393/");
+		    var discoveryClient = new DiscoveryClient("https://localhost:44393/");
 		    var metaDataResponse = await discoveryClient.GetAsync();
 			var userInfoClient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
 		    await WriteOutAccessTokenInfo();
