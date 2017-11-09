@@ -66,7 +66,8 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPost()]
-        public IActionResult CreateImage([FromBody] ImageForCreation imageForCreation)
+        [Authorize(Roles = "PayingUser")]
+		public IActionResult CreateImage([FromBody] ImageForCreation imageForCreation)
         {
             if (imageForCreation == null)
             {
@@ -94,6 +95,10 @@ namespace ImageGallery.API.Controllers
             
             // the full file path
             var filePath = Path.Combine($"{webRootPath}/images/{fileName}");
+
+			// set the ownerId on the imageEntity
+	        var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+	        imageEntity.OwnerId = ownerId;
 
             // write bytes and auto-close stream
             System.IO.File.WriteAllBytes(filePath, imageForCreation.Bytes);

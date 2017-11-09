@@ -146,14 +146,16 @@ namespace ImageGallery.Client.Controllers
 
 			throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
-        
-        public IActionResult AddImage()
+
+	    [Authorize(Roles = "PayingUser")]
+		public IActionResult AddImage()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+		[Authorize(Roles = "PayingUser")]
         public async Task<IActionResult> AddImage(AddImageViewModel addImageViewModel)
         {   
             if (!ModelState.IsValid)
@@ -187,12 +189,22 @@ namespace ImageGallery.Client.Controllers
             var response = await httpClient.PostAsync(
                 $"api/images",
                 new StringContent(serializedImageForCreation, System.Text.Encoding.Unicode, "application/json"))
-                .ConfigureAwait(false); 
+                .ConfigureAwait(false);
 
-            if (response.IsSuccessStatusCode)
+
+	        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+	            response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+	        {
+		        return RedirectToAction("AccessDenied", "Authorization");
+	        }
+
+
+			if (response.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
+
+
 
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }

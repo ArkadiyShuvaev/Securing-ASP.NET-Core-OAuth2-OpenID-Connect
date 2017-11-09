@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace ImageGallery.Client.Services
 	        {
 		        //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				_httpClient.SetBearerToken(token);
+				Debug.WriteLine($"Access token: {token}");
 	        }
 
 			_httpClient.BaseAddress = new Uri("https://localhost:44380/");
