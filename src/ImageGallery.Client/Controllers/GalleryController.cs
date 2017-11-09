@@ -209,8 +209,9 @@ namespace ImageGallery.Client.Controllers
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
-	    [Authorize(Roles = "PayingUser")]
-	    public async Task<IActionResult> OrderFrame()
+	    //[Authorize(Roles = "PayingUser")]
+	    [Authorize(Policy = Consts.CanOrderFramePolicyName)]
+		public async Task<IActionResult> OrderFrame()
 	    {
 		    var discoveryClient = new DiscoveryClient("https://localhost:44393/");
 		    var metaDataResponse = await discoveryClient.GetAsync();

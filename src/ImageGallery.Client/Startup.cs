@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,13 +11,14 @@ using Microsoft.AspNetCore.Http;
 using ImageGallery.Client.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ImageGallery.Client
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+	    
+
+	    public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -39,7 +39,7 @@ namespace ImageGallery.Client
 	        services.AddAuthorization(options =>
 	        {
 				options.AddPolicy(
-					"CanOrderFrame", policyBuilder =>
+					Consts.CanOrderFramePolicyName, policyBuilder =>
 				{
 					policyBuilder.RequireAuthenticatedUser();
 					policyBuilder.RequireClaim("country", "be");
