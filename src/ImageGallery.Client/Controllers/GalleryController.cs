@@ -137,8 +137,14 @@ namespace ImageGallery.Client.Controllers
             {
                 return RedirectToAction("Index");
             }
-       
-            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+
+	        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+	            response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+	        {
+		        return RedirectToAction("AccessDenied", "Authorization");
+	        }
+
+			throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
         
         public IActionResult AddImage()
