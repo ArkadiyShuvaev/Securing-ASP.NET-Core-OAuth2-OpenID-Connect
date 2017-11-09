@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using ImageGallery.Client.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ImageGallery.Client
 {
@@ -34,6 +35,17 @@ namespace ImageGallery.Client
         {
             // Add framework services.
             services.AddMvc();
+
+	        services.AddAuthorization(options =>
+	        {
+				options.AddPolicy(
+					"CanOrderFrame", policyBuilder =>
+				{
+					policyBuilder.RequireAuthenticatedUser();
+					policyBuilder.RequireClaim("country", "be");
+					policyBuilder.RequireClaim("subscriptionlevel", "PayingUser");
+				});
+	        });
 
             // register an IHttpContextAccessor so we can access the current
             // HttpContext in services by injecting it
@@ -78,7 +90,7 @@ namespace ImageGallery.Client
 				Authority = "https://localhost:44393/",
 				RequireHttpsMetadata = true,
 				ClientId = "imagegalleryclient",
-				Scope = { "openid", "profile", "address", "roles", "imagegalleryapi" },
+				Scope = { "openid", "profile", "address", "roles", "imagegalleryapi", "country", "subscriptionlevel" },
 				ResponseType = "code id_token",
 				//CallbackPath = "...",
 				//SignedOutCallbackPath = new PathString(""),
