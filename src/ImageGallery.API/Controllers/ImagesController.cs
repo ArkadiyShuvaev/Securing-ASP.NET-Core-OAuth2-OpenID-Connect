@@ -13,6 +13,7 @@ using System.Linq;
 namespace ImageGallery.API.Controllers
 {
     [Route("api/images")]
+	[Authorize]
     public class ImagesController : Controller
     {
         private readonly IGalleryRepository _galleryRepository;
@@ -28,8 +29,11 @@ namespace ImageGallery.API.Controllers
         [HttpGet()]
         public IActionResult GetImages()
         {
-            // get from repo
-            var imagesFromRepo = _galleryRepository.GetImages();
+
+	        var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+			// get from repo
+			var imagesFromRepo = _galleryRepository.GetImages(ownerId);
 
             // map to model
             var imagesToReturn = Mapper.Map<IEnumerable<Model.Image>>(imagesFromRepo);
@@ -41,7 +45,15 @@ namespace ImageGallery.API.Controllers
         [HttpGet("{id}", Name = "GetImage")]
         public IActionResult GetImage(Guid id)
         {
-            var imageFromRepo = _galleryRepository.GetImage(id);
+	        var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+			if (!_galleryRepository.IsImageOwner(id, ownerId))
+			{
+				return StatusCode(403);
+			}
+
+
+			var imageFromRepo = _galleryRepository.GetImage(id);
 
             if (imageFromRepo == null)
             {
@@ -139,7 +151,14 @@ namespace ImageGallery.API.Controllers
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            var imageFromRepo = _galleryRepository.GetImage(id);
+	        var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+
+			if (!_galleryRepository.IsImageOwner(id, ownerId))
+			{
+				return StatusCode(403);
+			}
+
+			var imageFromRepo = _galleryRepository.GetImage(id);
             if (imageFromRepo == null)
             {
                 return NotFound();

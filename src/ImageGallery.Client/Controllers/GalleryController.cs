@@ -46,9 +46,16 @@ namespace ImageGallery.Client.Controllers
                     JsonConvert.DeserializeObject<IList<Image>>(imagesAsString).ToList());
 
                 return View(galleryIndexViewModel);
-            }          
+            }
 
-            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+			if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+	            response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+	        {
+		        return RedirectToAction("AccessDenied", "Authorization");
+	        }
+
+
+	        throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
         public async Task<IActionResult> EditImage(Guid id)
@@ -71,6 +78,12 @@ namespace ImageGallery.Client.Controllers
                 
                 return View(editImageViewModel);
             }
+
+	        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+	            response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+	        {
+		        return RedirectToAction("AccessDenied", "Authorization");
+	        }
            
             throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
@@ -103,8 +116,14 @@ namespace ImageGallery.Client.Controllers
             {
                 return RedirectToAction("Index");
             }
-          
-            throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
+
+	        if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+	            response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+	        {
+		        return RedirectToAction("AccessDenied", "Authorization");
+	        }
+
+			throw new Exception($"A problem happened while calling the API: {response.ReasonPhrase}");
         }
 
         public async Task<IActionResult> DeleteImage(Guid id)

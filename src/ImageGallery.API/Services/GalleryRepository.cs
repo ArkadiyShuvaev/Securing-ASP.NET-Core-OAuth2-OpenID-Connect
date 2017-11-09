@@ -23,11 +23,17 @@ namespace ImageGallery.API.Services
             return _context.Images.FirstOrDefault(i => i.Id == id);
         }
   
-        public IEnumerable<Image> GetImages()
+        public IEnumerable<Image> GetImages(string ownerId = null)
         {
-            return _context.Images
-                .OrderBy(i => i.Title).ToList();
-        }
+			if (ownerId == null)
+			{
+				return _context.Images.OrderBy(i => i.Title).ToList();
+			}
+
+	        return _context.Images.Where(i => string.Equals(i.OwnerId, ownerId.ToString(),
+		        StringComparison.OrdinalIgnoreCase)).OrderBy(i => i.Title). ToList();
+
+		}
 
         public void AddImage(Image image)
         {
@@ -54,7 +60,12 @@ namespace ImageGallery.API.Services
             return (_context.SaveChanges() >= 0);
         }
 
-        public void Dispose()
+	    public bool IsImageOwner(Guid id, string ownerId)
+	    {
+		    return _context.Images.Any(i => i.Id == id && i.OwnerId == ownerId);
+	    }
+
+	    public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

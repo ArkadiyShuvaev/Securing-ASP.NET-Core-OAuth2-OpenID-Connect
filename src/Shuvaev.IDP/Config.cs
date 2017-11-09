@@ -46,6 +46,13 @@ namespace Shuvaev.IDP
 			};
 	    }
 
+	    public static IEnumerable<ApiResource> GetApiResources()
+	    {
+		    return new List<ApiResource>
+		    {
+			    new ApiResource("imagegalleryapi", "Image Gallery Api")
+		    };
+	    }
 
 	    public static IEnumerable<IdentityResource> GetIdentityResources()
 	    {
@@ -76,7 +83,8 @@ namespace Shuvaev.IDP
 						IdentityServerConstants.StandardScopes.OpenId,
 						IdentityServerConstants.StandardScopes.Profile,
 						IdentityServerConstants.StandardScopes.Address,
-						"roles"
+						"roles",
+						"imagegalleryapi"
 					},
 					ClientSecrets =
 					{
