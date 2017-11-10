@@ -43,17 +43,10 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetImage")]
-        public IActionResult GetImage(Guid id)
+        [Authorize(Policy = "MustOwnImage")]
+		public IActionResult GetImage(Guid id)
         {
-	        var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-			if (!_galleryRepository.IsImageOwner(id, ownerId))
-			{
-				return StatusCode(403);
-			}
-
-
-			var imageFromRepo = _galleryRepository.GetImage(id);
+	        var imageFromRepo = _galleryRepository.GetImage(id);
 
             if (imageFromRepo == null)
             {
@@ -122,15 +115,9 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteImage(Guid id)
+        [Authorize(Policy = "MustOwnImage")]
+		public IActionResult DeleteImage(Guid id)
         {
-			var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-			if (!_galleryRepository.IsImageOwner(id, ownerId))
-			{
-				return StatusCode(403);
-			}
-
 			var imageFromRepo = _galleryRepository.GetImage(id);
 
             if (imageFromRepo == null)
@@ -149,7 +136,8 @@ namespace ImageGallery.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateImage(Guid id, 
+        [Authorize(Policy = "MustOwnImage")]
+		public IActionResult UpdateImage(Guid id, 
             [FromBody] ImageForUpdate imageForUpdate)
         {           
             if (imageForUpdate == null)
@@ -162,14 +150,7 @@ namespace ImageGallery.API.Controllers
                 // return 422 - Unprocessable Entity when validation fails
                 return new UnprocessableEntityObjectResult(ModelState);
             }
-
-	        var ownerId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-
-			if (!_galleryRepository.IsImageOwner(id, ownerId))
-			{
-				return StatusCode(403);
-			}
-
+			
 			var imageFromRepo = _galleryRepository.GetImage(id);
             if (imageFromRepo == null)
             {

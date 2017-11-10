@@ -1,5 +1,7 @@
-﻿using ImageGallery.API.Entities;
+﻿using ImageGallery.API.Authorization;
+using ImageGallery.API.Entities;
 using ImageGallery.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,8 +31,21 @@ namespace ImageGallery.API
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-             services.AddMvc();
-                      
+            services.AddMvc();
+
+	        services.AddAuthorization(options =>
+	        {
+		        options.AddPolicy(
+					"MustOwnImage",
+					builder =>
+					{
+						builder.RequireAuthenticatedUser();
+						builder.AddRequirements(new MustOwnImageRequirement());
+					});
+	        });
+
+	        services.AddScoped<IAuthorizationHandler, MustOwnImageHandler>();
+
             // register the DbContext on the container, getting the connection string from
             // appSettings (note: use this during development; in a production environment,
             // it's better to store the connection string in an environment variable)

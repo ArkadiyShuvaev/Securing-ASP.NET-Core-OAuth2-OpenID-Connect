@@ -60,9 +60,9 @@ namespace ImageGallery.API.Services
             return (_context.SaveChanges() >= 0);
         }
 
-	    public bool IsImageOwner(Guid id, string ownerId)
+	    public bool IsImageOwner(Guid imageId, string ownerId)
 	    {
-		    return _context.Images.Any(i => i.Id == id && i.OwnerId == ownerId);
+		    return _context.Images.Any(i => i.Id == imageId && i.OwnerId == ownerId);
 	    }
 
 	    public void Dispose()
