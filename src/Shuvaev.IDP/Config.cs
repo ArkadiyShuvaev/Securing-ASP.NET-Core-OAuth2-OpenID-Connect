@@ -80,6 +80,17 @@ namespace Shuvaev.IDP
 				    ClientName = "Image Gallery",
 					ClientId = "imagegalleryclient",
 					AllowedGrantTypes = GrantTypes.Hybrid,
+
+					// IdentityTokenLifetime = 300,
+					// AuthorizationCodeLifetime = 300,
+					AccessTokenLifetime = 120, // TODO for the testing purpose only (120 s)
+
+					//RefreshTokenExpiration = TokenExpiration.Sliding,
+					//SlidingRefreshTokenLifetime = 
+
+					UpdateAccessTokenClaimsOnRefresh = true,
+					AllowOfflineAccess = true,
+
 					RedirectUris = 
 					{
 						"https://localhost:44379/signin-oidc"

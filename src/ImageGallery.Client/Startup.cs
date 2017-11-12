@@ -71,11 +71,10 @@ namespace ImageGallery.Client
                 app.UseExceptionHandler("/Shared/Error");
             }
 
-
-	        const string authenticationScheme = "Cookies";
+			
 			app.UseCookieAuthentication(new CookieAuthenticationOptions
 			{
-				AuthenticationScheme = authenticationScheme,
+				AuthenticationScheme = Consts.AuthenticationScheme,
 				AccessDeniedPath = new PathString("/Authorization/AccessDenied")
 			});
 
@@ -90,11 +89,15 @@ namespace ImageGallery.Client
 				Authority = "https://localhost:44393/",
 				RequireHttpsMetadata = true,
 				ClientId = "imagegalleryclient",
-				Scope = { "openid", "profile", "address", "roles", "imagegalleryapi", "country", "subscriptionlevel" },
+				Scope =
+				{
+					"openid", "profile", "address", "roles", "imagegalleryapi", "country", "subscriptionlevel",
+					"offline_access"
+				},
 				ResponseType = "code id_token",
 				//CallbackPath = "...",
 				//SignedOutCallbackPath = new PathString(""),
-				SignInScheme = authenticationScheme,
+				SignInScheme = Consts.AuthenticationScheme,
 				SaveTokens = true,
 				ClientSecret = "secret",
 				GetClaimsFromUserInfoEndpoint = true,

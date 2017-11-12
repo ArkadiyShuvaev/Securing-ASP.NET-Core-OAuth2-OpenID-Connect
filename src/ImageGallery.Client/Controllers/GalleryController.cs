@@ -32,6 +32,8 @@ namespace ImageGallery.Client.Controllers
         {
 
 	        await WriteOutIdentityInformation();
+	        var authentificateInfo =
+		        await HttpContext.Authentication.GetAuthenticateInfoAsync(Consts.AuthenticationScheme);
 
 			// call the API
 			var httpClient = await _imageGalleryHttpClient.GetClient(); 
