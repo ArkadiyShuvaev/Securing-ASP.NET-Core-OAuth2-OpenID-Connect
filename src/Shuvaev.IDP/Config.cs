@@ -54,7 +54,11 @@ namespace Shuvaev.IDP
 	    {
 		    return new List<ApiResource>
 		    {
-			    new ApiResource("imagegalleryapi", "Image Gallery Api", new List<string> { "role" })
+			    new ApiResource("imagegalleryapi", "Image Gallery Api", 
+				new List<string> { "role" })
+			    {
+				    ApiSecrets = { new Secret("apisecret".Sha256()) }
+			    }
 		    };
 	    }
 
@@ -84,7 +88,7 @@ namespace Shuvaev.IDP
 					// IdentityTokenLifetime = 300,
 					// AuthorizationCodeLifetime = 300,
 					AccessTokenLifetime = 120, // TODO for the testing purpose only (120 s)
-
+					AccessTokenType = AccessTokenType.Reference, 
 					//RefreshTokenExpiration = TokenExpiration.Sliding,
 					//SlidingRefreshTokenLifetime = 
 
