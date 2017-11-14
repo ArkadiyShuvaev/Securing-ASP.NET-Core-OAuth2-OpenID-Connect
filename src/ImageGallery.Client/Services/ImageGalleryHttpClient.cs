@@ -16,7 +16,6 @@ namespace ImageGallery.Client.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly HttpClient _httpClient = new HttpClient();
-	    private const string IdentityPointUri = "https://localhost:44393/";
 	    private const string ImageApiPointUri = "https://localhost:44380/";
 
 		public ImageGalleryHttpClient(IHttpContextAccessor httpContextAccessor)
@@ -61,7 +60,7 @@ namespace ImageGallery.Client.Services
 	    {
 		    var currentContext = _httpContextAccessor.HttpContext;
 
-			var discoveryClient = new DiscoveryClient(IdentityPointUri);
+			var discoveryClient = new DiscoveryClient(Consts.IdentityPointUri);
 		    var metaDataResponse = await discoveryClient.GetAsync();
 
 		    var tokenClient = new TokenClient(metaDataResponse.TokenEndpoint, "imagegalleryclient", "secret");

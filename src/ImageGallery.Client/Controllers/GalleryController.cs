@@ -256,8 +256,44 @@ namespace ImageGallery.Client.Controllers
 
 		public async Task Logout()
 	    {
-		    await HttpContext.Authentication.SignOutAsync("Cookies");
-		    await HttpContext.Authentication.SignOutAsync("oidc");
+		    var discoveryClient = new DiscoveryClient(ImageGallery.Client.Consts.IdentityPointUri);
+		    var discoveryDocument = await discoveryClient.GetAsync();
+
+			var revocationClient = new TokenRevocationClient(
+				discoveryDocument.RevocationEndpoint,
+				"imagegalleryclient",
+				"secret");
+
+		    var accessToken =
+			    await HttpContext.Authentication.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+
+		    if (!string.IsNullOrWhiteSpace(accessToken))
+		    {
+			    var response = await revocationClient.RevokeAccessTokenAsync(accessToken);
+			    if (response.IsError)
+			    {
+					throw new Exception("Problem encountered while revoking the access token", 
+						response.Exception);		    
+			    }
+			}
+
+		    var refreshToken = await HttpContext.Authentication.GetTokenAsync(
+				OpenIdConnectParameterNames.RefreshToken);
+
+		    if (!string.IsNullOrWhiteSpace(refreshToken))
+		    {
+			    var response = await revocationClient.RevokeRefreshTokenAsync(refreshToken);
+			    if (response.IsError)
+			    {
+					throw new Exception("Problem encountered while revoking the refresh token",
+						response.Exception);
+				}
+
+		    }
+
+		    
+			await HttpContext.Authentication.SignOutAsync("oidc");
+			await HttpContext.Authentication.SignOutAsync("Cookies");
 		}
     }
 }
