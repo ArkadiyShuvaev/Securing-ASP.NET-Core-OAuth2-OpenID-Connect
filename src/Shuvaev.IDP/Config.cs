@@ -84,6 +84,7 @@ namespace Shuvaev.IDP
 				    ClientName = "Image Gallery",
 					ClientId = "imagegalleryclient",
 					AllowedGrantTypes = GrantTypes.Hybrid,
+					RequireConsent = false,
 
 					// IdentityTokenLifetime = 300,
 					// AuthorizationCodeLifetime = 300,
