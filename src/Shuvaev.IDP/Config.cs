@@ -11,7 +11,7 @@ namespace Shuvaev.IDP
 {
     public static class Config
     {
-	    public static List<IdentityServer4.Test.TestUser> GetUsers()
+	    public static List<TestUser> GetUsers()
 	    {
 		    return new List<TestUser>
 		    {

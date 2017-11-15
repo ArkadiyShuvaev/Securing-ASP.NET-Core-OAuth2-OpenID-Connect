@@ -4,7 +4,7 @@
 
 using System;
 
-namespace IdentityServer4.Quickstart.UI
+namespace Shuvaev.IDP.Controllers.Account
 {
     public class AccountOptions
     {
