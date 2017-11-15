@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.Extensibility;
+﻿using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Shuvaev.IDP.Entities;
 using Shuvaev.IDP.Services;
 
@@ -46,7 +40,7 @@ namespace Shuvaev.IDP
 
 			services.AddIdentityServer()
 				.AddDeveloperSigningCredential()
-				.AddTestUsers(Config.GetUsers())
+				.AddShuvaevUserStore()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients());

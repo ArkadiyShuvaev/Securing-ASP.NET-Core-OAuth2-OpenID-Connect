@@ -1,10 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Shuvaev.IDP.Entities;
 
 namespace Shuvaev.IDP.Services
 {
 	public class UserRepository : IUserRepository
 	{
+		private readonly UserContext _context;
+
+		public UserRepository(UserContext context)
+		{
+			_context = context;
+		}
 		public User GetUserByUsername(string username)
 		{
 			throw new System.NotImplementedException();
@@ -32,7 +40,19 @@ namespace Shuvaev.IDP.Services
 
 		public IEnumerable<UserClaim> GetUserClaimsBySubjectId(string subjectId)
 		{
-			throw new System.NotImplementedException();
+			if (subjectId == null) throw new ArgumentNullException(nameof(subjectId));
+
+			var user = GetUser(subjectId);
+
+			return user.Claims;
+		}
+
+		private User GetUser(string subjectId)
+		{
+			var user = _context.Users.FirstOrDefault(
+				u => string.Equals(u.SubjectId.ToString(), subjectId, StringComparison.OrdinalIgnoreCase));
+			
+			return user;
 		}
 
 		public bool AreUserCredentialsValid(string username, string password)
@@ -42,7 +62,11 @@ namespace Shuvaev.IDP.Services
 
 		public bool IsUserActive(string subjectId)
 		{
-			throw new System.NotImplementedException();
+			if (subjectId == null) throw new ArgumentNullException(nameof(subjectId));
+
+			var user = GetUser(subjectId);
+
+			return user.IsActive;
 		}
 
 		public void AddUser(User user)
