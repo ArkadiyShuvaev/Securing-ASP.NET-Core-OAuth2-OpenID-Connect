@@ -22,8 +22,8 @@ namespace Shuvaev.IDP.Entities
 
 	    public bool IsActive { get; set; }
 
-	    public virtual ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
-	    public virtual ICollection<UserLogin> Logins { get; set; } = new List<UserLogin>();
+	    public ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
+	    public ICollection<UserLogin> Logins { get; set; } = new List<UserLogin>();
 
 	}
 }

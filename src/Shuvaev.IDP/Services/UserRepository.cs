@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using Shuvaev.IDP.Entities;
 
 namespace Shuvaev.IDP.Services
@@ -88,7 +89,7 @@ namespace Shuvaev.IDP.Services
 
 		private User GetUserBySubjIdImpl(string subjectId)
 		{
-			var user = _context.Users.FirstOrDefault(
+			var user = _context.Users.Include("Claims").Include("Logins").FirstOrDefault(
 				u => string.Compare(u.SubjectId.ToString(), subjectId, true) == 0);
 
 			return user;
@@ -96,7 +97,7 @@ namespace Shuvaev.IDP.Services
 
 		private User GetUserByUserNameImpl(string username)
 		{
-			return _context.Users.FirstOrDefault(u => string.Compare(username, u.Username, true) == 0);
+			return _context.Users.Include("Claims").Include("Logins").FirstOrDefault(u => string.Compare(username, u.Username, true) == 0);
 		}
 	}
 }
