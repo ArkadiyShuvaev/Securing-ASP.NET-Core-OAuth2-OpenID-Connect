@@ -66,9 +66,14 @@ namespace Shuvaev.IDP.Services
 			return user.IsActive;
 		}
 
-		public void AddUser(User user)
+		public bool AddUser(User user)
 		{
-			throw new System.NotImplementedException();
+			if (user == null) throw new ArgumentNullException(nameof(user));
+
+			user.SubjectId = Guid.NewGuid();
+			_context.Users.Add(user);
+
+			return _context.SaveChanges() > 0;
 		}
 
 		public void AddUserLogin(string subjectId, string loginProvider, string providerKey)

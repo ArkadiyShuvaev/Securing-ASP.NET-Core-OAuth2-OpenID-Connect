@@ -17,8 +17,7 @@ namespace Shuvaev.IDP.Entities
 		[MaxLength(100)]
 		public string Username { get; set; }
 
-	    [Required]
-		[MaxLength(100)]
+	    [MaxLength(100)]
 		public string Password { get; set; }
 
 	    public bool IsActive { get; set; }

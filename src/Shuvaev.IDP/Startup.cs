@@ -1,10 +1,12 @@
-﻿using Microsoft.ApplicationInsights.Extensibility;
+﻿using AutoMapper;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Shuvaev.IDP.Controllers.UserRegistration;
 using Shuvaev.IDP.Entities;
 using Shuvaev.IDP.Services;
 
@@ -58,6 +60,14 @@ namespace Shuvaev.IDP
             {
                 app.UseDeveloperExceptionPage();
             }
+
+	        AutoMapper.Mapper.Initialize(cfg =>
+	        {
+		        cfg.CreateMap<RegisterUserViewModel, User>()
+					.ForMember(d => d.Username, opt => opt.MapFrom(s => s.UserName));
+			});
+				
+				
 
 	        userContext.EnsureSeedDataForContext();
 

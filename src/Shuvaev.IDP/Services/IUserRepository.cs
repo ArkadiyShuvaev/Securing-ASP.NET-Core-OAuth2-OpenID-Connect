@@ -14,7 +14,7 @@ namespace Shuvaev.IDP.Services
 	    IEnumerable<UserClaim> GetUserClaimsBySubjectId(string subjectId);
 	    bool AreUserCredentialsValid(string username, string password);
 	    bool IsUserActive(string subjectId);
-	    void AddUser(User user);
+	    bool AddUser(User user);
 	    void AddUserLogin(string subjectId, string loginProvider, string providerKey);
 	    void AddUserClaim(string subjectId, string claimType, string claimValue);
 	}
