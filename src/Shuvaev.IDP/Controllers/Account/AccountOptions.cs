@@ -19,9 +19,15 @@ namespace Shuvaev.IDP.Controllers.Account
         // windows auth enabled.
         public static bool WindowsAuthenticationEnabled = true;
         public static bool IncludeWindowsGroups = false;
-        // specify the Windows authentication scheme and display name
-        public static readonly string WindowsAuthenticationSchemeName = "Windows";
 
-        public static string InvalidCredentialsErrorMessage = "Invalid username or password";
+
+	    // specify the Windows authentication schemes you want to use for authentication
+	    public static readonly string[] WindowsAuthenticationSchemes = new string[] { "Windows", "Negotiate", "NTLM" };
+
+		// specify the Windows authentication scheme and display name
+		public static readonly string WindowsAuthenticationSchemeName = "Windows";
+	    public static readonly string WindowsAuthenticationDisplayName = "Windows";
+
+		public static string InvalidCredentialsErrorMessage = "Invalid username or password";
     }
 }

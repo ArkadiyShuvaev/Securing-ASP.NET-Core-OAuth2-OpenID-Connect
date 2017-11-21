@@ -30,7 +30,6 @@ namespace Shuvaev.IDP.Controllers.Account
     [SecurityHeaders]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
 	    private readonly IUserRepository _userRepository;
@@ -164,7 +163,7 @@ namespace Shuvaev.IDP.Controllers.Account
                 var result = await HttpContext.AuthenticateAsync(AccountOptions.WindowsAuthenticationSchemeName);
                 if (result?.Principal is WindowsPrincipal wp)
                 {
-                    props.Items.Add("scheme", AccountOptions.WindowsAuthenticationSchemeName);
+					props.Items.Add("scheme", AccountOptions.WindowsAuthenticationSchemeName);
 
                     var id = new ClaimsIdentity(provider);
                     id.AddClaim(new Claim(JwtClaimTypes.Subject, wp.Identity.Name));
@@ -185,18 +184,15 @@ namespace Shuvaev.IDP.Controllers.Account
                         props);
                     return Redirect(props.RedirectUri);
                 }
-                else
-                {
-                    // challenge/trigger windows auth
-                    return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
-                }
+	            
+				// challenge/trigger windows auth
+	            return Challenge(AccountOptions.WindowsAuthenticationSchemeName);
             }
-            else
-            {
-                // start challenge and roundtrip the return URL
-                props.Items.Add("scheme", provider);
-                return Challenge(props, provider);
-            }
+	        
+			
+			// start challenge and roundtrip the return URL
+	        props.Items.Add("scheme", provider);
+	        return Challenge(props, provider);
         }
 
         /// <summary>
@@ -206,7 +202,8 @@ namespace Shuvaev.IDP.Controllers.Account
         public async Task<IActionResult> ExternalLoginCallback()
         {
             // read external identity from the temporary cookie
-            var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(
+				IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
             if (result?.Succeeded != true)
             {
                 throw new Exception("External authentication error");
@@ -235,16 +232,27 @@ namespace Shuvaev.IDP.Controllers.Account
             var provider = result.Properties.Items["scheme"];
             var userId = userIdClaim.Value;
 
-            // this is where custom logic would most likely be needed to match your users from the
-            // external provider's authentication result, and provision the user as you see fit.
-            // 
-            // check if the external user is already provisioned
-            var user = _users.FindByExternalProvider(provider, userId);
+	        var returnUrl = result.Properties.Items["returnUrl"];
+
+			// this is where custom logic would most likely be needed to match your users from the
+			// external provider's authentication result, and provision the user as you see fit.
+			// 
+			// check if the external user is already provisioned
+			var user = _userRepository.GetUserByProvider(provider, userId);
             if (user == null)
             {
                 // this sample simply auto-provisions new external user
                 // another common approach is to start a registrations workflow first
-                user = _users.AutoProvisionUser(provider, userId, claims);
+	            var returnUrlAfterRegistration = Url.Action("ExternalLoginCallback", new { returnUrl = returnUrl });
+
+	            var continueWithUrl = Url.Action("RegisterUser", "UserRegistration", new
+	            {
+		            returnUrl = returnUrlAfterRegistration,
+		            provider = provider,
+		            providerUserId = userId
+	            });
+
+	            return Redirect(continueWithUrl);
             }
 
             var additionalClaims = new List<Claim>();
@@ -267,14 +275,13 @@ namespace Shuvaev.IDP.Controllers.Account
             }
 
             // issue authentication cookie for user
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, userId, user.SubjectId, user.Username));
-            await HttpContext.SignInAsync(user.SubjectId, user.Username, provider, props, additionalClaims.ToArray());
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, userId, user.SubjectId.ToString(), user.Username));
+            await HttpContext.SignInAsync(user.SubjectId.ToString(), user.Username, provider, props, additionalClaims.ToArray());
 
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
             // validate return URL and redirect back to authorization endpoint or a local page
-            var returnUrl = result.Properties.Items["returnUrl"];
             if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);

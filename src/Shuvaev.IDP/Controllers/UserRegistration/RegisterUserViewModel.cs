@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Shuvaev.IDP.Controllers.UserRegistration
@@ -50,6 +51,6 @@ namespace Shuvaev.IDP.Controllers.UserRegistration
 
 		public string ProviderUserId { get; set; }
 
-		public bool IsProvisioningFromExternal => Provider != null;
+		public bool IsProvisioningFromExternal => Provider != null && Provider.Any();
 	}
 }

@@ -57,7 +57,22 @@ namespace Shuvaev.IDP.Controllers.Account
                     AuthenticationScheme = x.Name
                 }).ToList();
 
-            var allowLocal = true;
+
+	        if (AccountOptions.WindowsAuthenticationEnabled)
+	        {
+		        // this is needed to handle windows auth schemes
+		        var windowsSchemes = schemes.Where(s => AccountOptions.WindowsAuthenticationSchemes.Contains(s.Name));
+		        if (windowsSchemes.Any())
+		        {
+			        providers.Add(new ExternalProvider
+			        {
+				        AuthenticationScheme = AccountOptions.WindowsAuthenticationSchemes.First(),
+				        DisplayName = AccountOptions.WindowsAuthenticationDisplayName
+			        });
+		        }
+	        }
+
+			var allowLocal = true;
             if (context?.ClientId != null)
             {
                 var client = await _clientStore.FindEnabledClientByIdAsync(context.ClientId);

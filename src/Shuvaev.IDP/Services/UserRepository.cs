@@ -21,7 +21,7 @@ namespace Shuvaev.IDP.Services
 
 		public User GetUserBySubjectId(string subjectId)
 		{
-			throw new System.NotImplementedException();
+			return GetUserBySubjIdImpl(subjectId);
 		}
 
 		public User GetUserByEmail(string email)
@@ -31,7 +31,9 @@ namespace Shuvaev.IDP.Services
 
 		public User GetUserByProvider(string loginProvider, string providerKey)
 		{
-			throw new System.NotImplementedException();
+			return _context.Users.FirstOrDefault(
+				u => u.Logins.Any(l => string.Equals(l.LoginProvider, loginProvider, StringComparison.OrdinalIgnoreCase) &&
+				                       string.Equals(l.ProviderKey, providerKey, StringComparison.OrdinalIgnoreCase)));
 		}
 
 		public IEnumerable<UserLogin> GetUserLoginsBySubjectId(string subjectId)

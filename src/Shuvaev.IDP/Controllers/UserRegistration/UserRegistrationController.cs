@@ -25,11 +25,13 @@ namespace Shuvaev.IDP.Controllers.UserRegistration
 
 
 		[HttpGet]
-		public IActionResult RegisterUser(string returnUrl)
+		public IActionResult RegisterUser(RegistrationInputModel inputModel)
 		{
 			return View(new RegisterUserViewModel
 			{
-				ReturnUrl = returnUrl
+				ReturnUrl = inputModel.ReturnUrl,
+				Provider = inputModel.Provider,
+				ProviderUserId = inputModel.ProviderUserId
 			});
 		}
 
@@ -56,14 +58,24 @@ namespace Shuvaev.IDP.Controllers.UserRegistration
 				new UserClaim {ClaimType = "subscriptionlevel", ClaimValue = "FreeUser"}
 			};
 
-				
+			if (model.IsProvisioningFromExternal)
+			{
+				user.Logins.Add(new UserLogin
+				{
+					LoginProvider = model.Provider,
+					ProviderKey = model.ProviderUserId
+				});
+			}
 
 			if (!_marvinUserRepository.AddUser(user))
 			{
 				throw new Exception("Creating a user failed.");
 			}
 
-			await HttpContext.SignInAsync(user.SubjectId.ToString(), user.Username);
+			if (!model.IsProvisioningFromExternal)
+			{
+				await HttpContext.SignInAsync(user.SubjectId.ToString(), user.Username);
+			}
 
 			// continue with the flow     
 			if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
