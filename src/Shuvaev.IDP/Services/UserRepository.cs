@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Shuvaev.IDP.Entities;
 
@@ -26,7 +27,12 @@ namespace Shuvaev.IDP.Services
 
 		public User GetUserByEmail(string email)
 		{
-			throw new System.NotImplementedException();
+			if (email == null) throw new ArgumentNullException(nameof(email));
+
+			return _context.Users.FirstOrDefault(
+				u => u.Claims.Any(
+					c => c.ClaimType == JwtClaimTypes.Email && string.Equals(c.ClaimValue, email, 
+				                                                            StringComparison.OrdinalIgnoreCase)));
 		}
 
 		public User GetUserByProvider(string loginProvider, string providerKey)
@@ -79,9 +85,16 @@ namespace Shuvaev.IDP.Services
 			return _context.SaveChanges() > 0;
 		}
 
-		public void AddUserLogin(string subjectId, string loginProvider, string providerKey)
+		public bool AddUserLogin(string subjectId, string loginProvider, string providerKey)
 		{
-			throw new System.NotImplementedException();
+			var user = GetUserBySubjIdImpl(subjectId);
+			user.Logins.Add(new UserLogin
+			{
+				LoginProvider = loginProvider,
+				ProviderKey = providerKey
+			});
+
+			return _context.SaveChanges() > 0;
 		}
 
 		public void AddUserClaim(string subjectId, string claimType, string claimValue)

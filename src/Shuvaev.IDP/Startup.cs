@@ -16,9 +16,9 @@ using Shuvaev.IDP.Services;
 
 namespace Shuvaev.IDP
 {
-    public class Startup
+	public class Startup
     {
-		private static IConfiguration _configuration;
+	    private static IConfiguration _configuration;
 
 		public Startup(IConfiguration configuration)
 		{
@@ -55,7 +55,7 @@ namespace Shuvaev.IDP
 
 	        services.AddAuthentication() //CookieAuthenticationDefaults.AuthenticationScheme
 										 //.AddCookie(o => o.LoginPath = new PathString("/login"))
-				.AddFacebook("FacebookScheme", "Facebook", o =>
+				.AddFacebook(Consts.FacebookAuthenticationSchemeName, Consts.FacebookDisplayName, o =>
 		        {
 			        o.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 					o.AppId = config.Facebook.AppId;

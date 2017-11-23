@@ -241,18 +241,7 @@ namespace Shuvaev.IDP.Controllers.Account
 			var user = _userRepository.GetUserByProvider(provider, userId);
             if (user == null)
             {
-                // this sample simply auto-provisions new external user
-                // another common approach is to start a registrations workflow first
-	            var returnUrlAfterRegistration = Url.Action("ExternalLoginCallback", new { returnUrl = returnUrl });
-
-	            var continueWithUrl = Url.Action("RegisterUser", "UserRegistration", new
-	            {
-		            returnUrl = returnUrlAfterRegistration,
-		            provider = provider,
-		            providerUserId = userId
-	            });
-
-	            return Redirect(continueWithUrl);
+	            return CreateUserAndRedirect(provider, claims, userId, returnUrl);
             }
 
             var additionalClaims = new List<Claim>();
@@ -290,7 +279,46 @@ namespace Shuvaev.IDP.Controllers.Account
             return Redirect("~/");
         }
 
-        /// <summary>
+	    private IActionResult CreateUserAndRedirect(string provider, List<Claim> claims, string userId, string returnUrl)
+	    {
+		    if (provider == Consts.FacebookAuthenticationSchemeName)
+		    {
+			    var externalUserEmail =
+				    claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
+			    if (externalUserEmail?.Value != null)
+			    {
+				    var userByEmail = _userRepository.GetUserByEmail(externalUserEmail.Value);
+
+				    if (userByEmail != null)
+				    {
+					    if (!_userRepository.AddUserLogin(userByEmail.SubjectId.ToString(),
+						    Consts.FacebookAuthenticationSchemeName, userId))
+					    {
+						    throw new Exception($"Cannot associate existing user with the {provider} provider");
+					    }
+
+					    var continueWithUrlAfterAddingUserLogin = Url.Action("ExternalLoginCallback", new {returnUrl = returnUrl});
+
+					    return Redirect(continueWithUrlAfterAddingUserLogin);
+				    }
+			    }
+		    }
+
+		    // this sample simply auto-provisions new external user
+		    // another common approach is to start a registrations workflow first
+		    var returnUrlAfterRegistration = Url.Action("ExternalLoginCallback", new {returnUrl = returnUrl});
+
+		    var continueWithUrl = Url.Action("RegisterUser", "UserRegistration", new
+		    {
+			    returnUrl = returnUrlAfterRegistration,
+			    provider = provider,
+			    providerUserId = userId
+		    });
+
+		    return Redirect(continueWithUrl);
+	    }
+
+	    /// <summary>
         /// Show logout page
         /// </summary>
         [HttpGet]

@@ -15,7 +15,7 @@ namespace Shuvaev.IDP.Services
 	    bool AreUserCredentialsValid(string username, string password);
 	    bool IsUserActive(string subjectId);
 	    bool AddUser(User user);
-	    void AddUserLogin(string subjectId, string loginProvider, string providerKey);
+	    bool AddUserLogin(string subjectId, string loginProvider, string providerKey);
 	    void AddUserClaim(string subjectId, string claimType, string claimValue);
 	}
 }
