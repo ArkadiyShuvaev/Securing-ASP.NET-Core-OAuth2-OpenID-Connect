@@ -2,6 +2,7 @@
 using IdentityServer4;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -53,8 +54,9 @@ namespace Shuvaev.IDP
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients());
 
-	        services.AddAuthentication() //CookieAuthenticationDefaults.AuthenticationScheme
-										 //.AddCookie(o => o.LoginPath = new PathString("/login"))
+
+			services.AddAuthentication()
+				.AddCookie("idsrv.2FA")
 				.AddFacebook(Consts.FacebookAuthenticationSchemeName, Consts.FacebookDisplayName, o =>
 		        {
 			        o.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -85,8 +87,7 @@ namespace Shuvaev.IDP
 			
 
 	        userContext.EnsureSeedDataForContext();
-
-
+			
 			app.UseIdentityServer();
 	        
 			app.UseStaticFiles();
