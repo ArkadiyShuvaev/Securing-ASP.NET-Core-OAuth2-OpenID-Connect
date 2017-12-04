@@ -4,6 +4,7 @@
 	{
 		public ConnectionStringsCfg ConnectionStrings { get; set; }
 		public FacebookConfiguration Facebook { get; set; }
+		public string SigningCredentialCertificateThumbPrint { get; set; }
 
 		public class FacebookConfiguration
 		{

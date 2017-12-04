@@ -45,12 +45,15 @@ namespace Shuvaev.IDP
 
 			services.AddMvc();
 
-	        var migrationsAssembly = typeof(Startup).Assembly.GetName().Name;
 
+			var migrationsAssembly = typeof(Startup).Assembly.GetName().Name;
+			
 			var identityServerDataDbConnectionString =
 		        _configuration.GetConnectionString(Consts.IdentityServerDataDbConnectionString);
-			services.AddIdentityServer()
-				.AddSigningCredential(LoadCertificateFromStore())
+	        
+	        services.AddIdentityServer()
+				.AddSigningCredential(
+					LoadCertificateFromStore(config.SigningCredentialCertificateThumbPrint))
 				.AddShuvaevUserStore()
 				.AddConfigurationStore(options => 
 					options.ConfigureDbContext = 
@@ -111,17 +114,14 @@ namespace Shuvaev.IDP
 
         }
 
-	    public X509Certificate2 LoadCertificateFromStore()
+	    public X509Certificate2 LoadCertificateFromStore(string certificateThumbPrint) //in uppercase
 	    {
-		    // In uppercase
-			const string thumbPrint = "8D06B0F693B679CF9F5F0115C6533E33A3F44A12"; 
-
 		    using (var store = new X509Store(StoreName.My, StoreLocation.LocalMachine))
 		    {
 			    store.Open(OpenFlags.ReadOnly);
 
 			    var certCollection = store.Certificates.Find(
-					X509FindType.FindByThumbprint, thumbPrint, true);
+					X509FindType.FindByThumbprint, certificateThumbPrint, true);
 			    if (certCollection.Count == 0)
 			    {
 				    throw new Exception("Tag specified certificate was not found.");
