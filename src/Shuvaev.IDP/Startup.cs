@@ -56,6 +56,11 @@ namespace Shuvaev.IDP
 					options.ConfigureDbContext = 
 						builder => builder
 							.UseSqlServer(identityServerDataDbConnectionString, 
+								optionsBuilder => optionsBuilder.MigrationsAssembly(migrationsAssembly)))
+				.AddOperationalStore(options =>
+					options.ConfigureDbContext =
+						builder => builder
+							.UseSqlServer(identityServerDataDbConnectionString,
 								optionsBuilder => optionsBuilder.MigrationsAssembly(migrationsAssembly)));
 
 			services.AddAuthentication()
@@ -71,7 +76,8 @@ namespace Shuvaev.IDP
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, 
-			ILoggerFactory logger, UserContext userContext, ConfigurationDbContext configurationDbContext)
+			ILoggerFactory logger, UserContext userContext, 
+			ConfigurationDbContext configurationDbContext, PersistedGrantDbContext persistedGrantDbContext)
         {
 	        //var configuration = app.ApplicationServices.GetService<TelemetryConfiguration>();
 	        //configuration.DisableTelemetry = true;
@@ -89,7 +95,9 @@ namespace Shuvaev.IDP
 					.ForMember(d => d.Username, opt => opt.MapFrom(s => s.UserName));
 			});
 
-	        configurationDbContext.Database.Migrate();
+	        persistedGrantDbContext.Database.Migrate();
+
+			configurationDbContext.Database.Migrate();
 	        configurationDbContext.EnsureSeedDataForContext();
 
 			userContext.Database.Migrate();
