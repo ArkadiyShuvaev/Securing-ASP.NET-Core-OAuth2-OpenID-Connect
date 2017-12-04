@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Shuvaev.IDP.Entities;
 
-namespace Shuvaev.IDP.Entities
+namespace Shuvaev.IDP.Contextes
 {
     public static class UserContextExtensions
     {
 		public static void EnsureSeedDataForContext(this UserContext ctx)
 	    {
-		    if (ctx.Users.Any())
+		    if (Queryable.Any<User>(ctx.Users))
 		    {
 			    return;
 		    }

@@ -4,5 +4,6 @@
 	{
 		public const string FacebookDisplayName = "Facebook";
 		public const string FacebookAuthenticationSchemeName = "Facebook";
+		public const string IdentityServerDataDbConnectionString = "identityServerDataDbConnectionString";
 	}
 }

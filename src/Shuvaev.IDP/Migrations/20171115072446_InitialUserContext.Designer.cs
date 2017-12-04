@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Shuvaev.IDP.Entities;
 using System;
+using Shuvaev.IDP.Contextes;
 
 namespace Shuvaev.IDP.Migrations
 {

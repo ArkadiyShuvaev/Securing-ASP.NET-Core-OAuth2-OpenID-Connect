@@ -4,6 +4,7 @@ using System.Linq;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Shuvaev.IDP.Entities;
+using Shuvaev.IDP.Contextes;
 
 namespace Shuvaev.IDP.Services
 {
